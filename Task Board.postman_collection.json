@@ -1,0 +1,241 @@
+{
+	"info": {
+		"_postman_id": "c74150e1-1188-4d84-bb1e-ad612215aea8",
+		"name": "Task Board",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "25580788"
+	},
+	"item": [
+		{
+			"name": "Boards",
+			"item": []
+		},
+		{
+			"name": "Tasks",
+			"item": [
+				{
+					"name": "Board",
+					"item": [
+						{
+							"name": "List all done items",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});",
+											"",
+											"pm.test(\"Check if all tasks are with status done\" , function () {",
+											"const respBody = pm.response.json();",
+											"    for (let i=0 ; i<respBody.length; i++){",
+											"     pm.expect(respBody[i].board.name).to.be.equal(\"Done\")",
+											"    }",
+											"})"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "https://taskboardjs.vanessailieva.repl.co/api/tasks/board/done",
+									"protocol": "https",
+									"host": [
+										"taskboardjs",
+										"vanessailieva",
+										"repl",
+										"co"
+									],
+									"path": [
+										"api",
+										"tasks",
+										"board",
+										"done"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "POST",
+					"item": [
+						{
+							"name": "Create task",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 201 ot 202\", function () {",
+											"  pm.expect(pm.response.code,\"Status code protperty\").to.be.oneOf([201,202])",
+											"});",
+											"",
+											"const respBody = pm.response.json();",
+											"pm.environment.set(\"taskId\", respBody.task.id);"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n\n\"title\": \"{{$randomCity}}\" , \n\"describtion\": \"API + UI Tests\",\n\"board\":\"Open\"\n\n\n\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://taskboardjs.vanessailieva.repl.co/api/tasks",
+									"protocol": "https",
+									"host": [
+										"taskboardjs",
+										"vanessailieva",
+										"repl",
+										"co"
+									],
+									"path": [
+										"api",
+										"tasks"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "PATCH",
+					"item": [
+						{
+							"name": "Update task title",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Update task title\", function(){",
+											"",
+											"const respBody=pm.response.json();",
+											"pm.expect(respBody.task.title, \"Title property\").to.be.not.empty",
+											"pm.expect(typeof(respBody.task.title)).to.be.equal(\"string\");",
+											"",
+											"",
+											"})",
+											"",
+											"",
+											"",
+											"",
+											"",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "PATCH",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n\"title\":\"edited\"\n\n\n\n\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://taskboardjs.vanessailieva.repl.co/api/tasks/{{taskId}}",
+									"protocol": "https",
+									"host": [
+										"taskboardjs",
+										"vanessailieva",
+										"repl",
+										"co"
+									],
+									"path": [
+										"api",
+										"tasks",
+										"{{taskId}}"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Delete",
+					"item": [
+						{
+							"name": "Delete task",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Check if the task can be deleted \", function(){",
+											"",
+											"const respBody=pm.response.json();",
+											"pm.expect(respBody.msg, \"msg property\").to.be.equal(\"Task deleted: \" + pm.environment.get(\"taskId\"));",
+											"",
+											"",
+											"})",
+											"",
+											"",
+											"",
+											"",
+											"",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n\"title\":\"edited\"\n\n\n\n\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://taskboardjs.vanessailieva.repl.co/api/tasks/{{taskId}}",
+									"protocol": "https",
+									"host": [
+										"taskboardjs",
+										"vanessailieva",
+										"repl",
+										"co"
+									],
+									"path": [
+										"api",
+										"tasks",
+										"{{taskId}}"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				}
+			]
+		}
+	]
+}
